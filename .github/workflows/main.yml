@@ -152,10 +152,3 @@ jobs:
     steps:
       - name: Success message
         run: echo "✅ All CI checks passed successfully!"
-
-      - name: Deploy to production
-        run: |
-          echo "🚀 Deploying to production"
-          echo "Add your deployment commands here"
-          # Example using SSH:
-          # ssh user@server 'cd /app && docker-compose pull && docker-compose up -d'
