@@ -1,0 +1,56 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment || 'production' }}
+      url: https://your-app-url.com
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to server
+        run: |
+          echo "🚀 Deploying to ${{ github.event.inputs.environment || 'production' }}"
+          echo "Add your deployment commands here"
+          # Example using SSH:
+          # ssh user@server 'cd /app && docker-compose pull && docker-compose up -d'
+
+      # Example: Deploy to Docker Swarm
+      # - name: Deploy to Docker Swarm
+      #   env:
+      #     DOCKER_HOST: ${{ secrets.DOCKER_HOST }}
+      #     DOCKER_CERT_PATH: ${{ secrets.DOCKER_CERT_PATH }}
+      #   run: |
+      #     docker stack deploy -c docker-compose.yml nestjs-app
+
+      # Example: Deploy to Kubernetes
+      # - name: Deploy to Kubernetes
+      #   uses: azure/k8s-deploy@v4
+      #   with:
+      #     manifests: |
+      #       k8s/deployment.yml
+      #       k8s/service.yml
+      #     images: |
+      #       ghcr.io/${{ github.repository }}:${{ github.sha }}
+
+      - name: Deployment Status
+        run: echo "✅ Deployment completed successfully!"

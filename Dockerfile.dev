@@ -1,0 +1,26 @@
+# Development Dockerfile with hot reload support
+
+FROM node:24-alpine
+
+WORKDIR /app
+
+# Install dumb-init
+RUN apk add --no-cache dumb-init
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev)
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Use dumb-init
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start in development mode with hot reload
+CMD ["npm", "run", "start:dev"]
